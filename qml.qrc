@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>list.qml</file>
+        <file>add-todo.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>MyButton.qml</file>
+    </qresource>
+</RCC>
