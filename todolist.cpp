@@ -6,7 +6,7 @@ void TodoList::addTodo(Todo todo) {
 
 void TodoList::removeTodo(std::string todoText)
 {
-    todos.erase(std::remove_if(todos.begin(), todos.end(), [todoText] (Todo todo) {return todo.text == todoText;}));
+    todos.erase(std::remove_if(todos.begin(), todos.end(), [todoText] (Todo todo) {return todo.text == todoText;}), todos.end());
 }
 
 const std::vector<Todo> TodoList::getTodos() const {
