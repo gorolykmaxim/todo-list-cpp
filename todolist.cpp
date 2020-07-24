@@ -1,7 +1,7 @@
 #include "todolist.h"
 
 void TodoList::addTodo(std::string todoText) {
-    todos.push_back({.text = todoText, .id = currentId++});
+    todos.push_back({currentId++, todoText});
 }
 
 void TodoList::removeTodo(int todoId)
