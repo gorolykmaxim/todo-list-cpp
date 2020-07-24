@@ -6,13 +6,7 @@ void TodoList::addTodo(Todo todo) {
 
 void TodoList::removeTodo(std::string todoText)
 {
-    for (auto it = todos.begin(); it != todos.end();) {
-        if (it->text == todoText) {
-            todos.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    todos.erase(std::remove_if(todos.begin(), todos.end(), [todoText] (Todo todo) {return todo.text == todoText;}));
 }
 
 const std::vector<Todo> TodoList::getTodos() const {
