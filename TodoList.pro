@@ -38,3 +38,6 @@ HEADERS += \
     listviewmodel.h \
     todolist.h \
     todomodel.h
+
+DISTFILES += \
+    .gitignore
