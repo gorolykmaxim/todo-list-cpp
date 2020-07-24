@@ -13,7 +13,7 @@ void ListViewModel::load() {
 void ListViewModel::removeTodo(TodoModel *model)
 {
     threadPool.tryStart([=] () {
-        todoList.removeTodo(model->getText().toStdString());
+        todoList.removeTodo(model->getId());
         reload();
     });
 }

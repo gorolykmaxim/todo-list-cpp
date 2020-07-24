@@ -18,7 +18,7 @@ QString AddTodoViewModel::getText() const {
 void AddTodoViewModel::addTodo() {
     QString todoText = text;
     threadPool.tryStart([=] () {
-        todoList.addTodo({todoText.toStdString()});
+        todoList.addTodo(todoText.toStdString());
         dispose();
     });
 }

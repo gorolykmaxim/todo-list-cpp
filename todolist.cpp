@@ -1,18 +1,12 @@
 #include "todolist.h"
 
-void TodoList::addTodo(Todo todo) {
-    todos.push_back(std::move(todo));
+void TodoList::addTodo(std::string todoText) {
+    todos.push_back({.text = todoText, .id = currentId++});
 }
 
-void TodoList::removeTodo(std::string todoText)
+void TodoList::removeTodo(int todoId)
 {
-    for (auto it = todos.begin(); it != todos.end();) {
-        if (it->text == todoText) {
-            todos.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    todos.erase(std::remove_if(todos.begin(), todos.end(), [todoId] (Todo todo) {return todo.id == todoId;}));
 }
 
 const std::vector<Todo> TodoList::getTodos() const {
