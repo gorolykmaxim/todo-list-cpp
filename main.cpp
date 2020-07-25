@@ -5,12 +5,17 @@
 #include <QQmlContext>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QFontDatabase>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QGuiApplication app(argc, argv);
+    QString fontsDir = ":/fonts/";
+    for (auto font: QDir(fontsDir).entryList()) {
+        QFontDatabase::addApplicationFont(fontsDir + font);
+    }
     TodoList list;
     list.addTodo({"Chill"});
     list.addTodo({"Try to finish this app"});
