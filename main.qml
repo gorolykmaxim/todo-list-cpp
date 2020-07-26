@@ -11,6 +11,7 @@ Window {
     StackView {
         id: stack
         anchors.fill: parent
+        anchors.margins: 20
         focus: true
         initialItem: "list.qml"
     }

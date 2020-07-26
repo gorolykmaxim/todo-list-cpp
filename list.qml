@@ -2,7 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Page {
+TodoView {
+    rootView: true
     StackView.onStatusChanged: {
         if (StackView.status == StackView.Activating) {
             listVM.load()
@@ -10,8 +11,6 @@ Page {
     }
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 20
-
         Label {
             text: "Today's Tos-Dos:"
             font.pixelSize: 20
@@ -42,12 +41,22 @@ Page {
                 }
             }
         }
-        MyButton {
-            id: addTodoBtn
-            text: "Add ToDo"
-            focus: true
-            onClicked: stack.push("add-todo.qml")
-            KeyNavigation.tab: todoList
+        RowLayout {
+            MyButton {
+                id: addTodoBtn
+                text: "Add ToDo"
+                focus: true
+                onClicked: stack.push("add-todo.qml")
+                KeyNavigation.tab: helpBtn
+                KeyNavigation.right: helpBtn
+            }
+            MyButton {
+                id: helpBtn
+                text: "Help"
+                onClicked: stack.push("help.qml")
+                KeyNavigation.tab: todoList
+                KeyNavigation.up: todoList
+            }
         }
     }
 }

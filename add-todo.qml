@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-Page {
+TodoView {
     Connections {
         target: addTodoVM
         function onCloseView() {
@@ -14,6 +14,7 @@ Page {
         todoTextInput.accepted.connect(addBtn.clicked)
         addBtn.clicked.connect(addTodoVM.addTodo)
         cancelBtn.clicked.connect(addTodoVM.cancel)
+        onBackPressed.connect(addTodoVM.cancel)
     }
     ColumnLayout {
         anchors.centerIn: parent
