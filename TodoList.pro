@@ -39,5 +39,16 @@ HEADERS += \
     todolist.h \
     todomodel.h
 
+android {
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+}
+
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    android/AndroidManifest.xml \
+    android/build.gradle \
+    android/res/drawable/icon.png \
+    android/res/drawable/splash.xml \
+    android/res/values/apptheme.xml \
+    android/res/values/libs.xml
+
