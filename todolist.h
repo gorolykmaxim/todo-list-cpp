@@ -14,7 +14,7 @@ class TodoList
 public:
     void addTodo(std::string todoText);
     void removeTodo(int todoId);
-    const std::vector<Todo> getTodos() const;
+    std::vector<Todo> getTodos() const;
 private:
     std::vector<Todo> todos;
     int currentId = 1;

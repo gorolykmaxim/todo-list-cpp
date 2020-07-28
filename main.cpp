@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     QString fontsDir = ":/fonts/";
-    for (auto font: QDir(fontsDir).entryList()) {
+    for (const auto& font: QDir(fontsDir).entryList()) {
         QFontDatabase::addApplicationFont(fontsDir + font);
     }
     TodoList list;

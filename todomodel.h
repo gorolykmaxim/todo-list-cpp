@@ -10,7 +10,7 @@ class TodoModel : public QObject {
     Q_PROPERTY(QString text READ getText NOTIFY textChanged)
 public:
     explicit TodoModel(const Todo& todo);
-    const QString getText() const;
+    QString getText() const;
     int getId() const;
 signals:
     void textChanged(QString& newText);

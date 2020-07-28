@@ -12,7 +12,7 @@ class ListViewModel : public QObject
     Q_PROPERTY(QList<TodoModel*> todos READ todos NOTIFY todosChanged)
 public:
     explicit ListViewModel(TodoList& todoList, QThreadPool& threadPool);
-    const QList<TodoModel*> todos() const;
+    QList<TodoModel*> todos() const;
     ~ListViewModel();
 public slots:
     void load();

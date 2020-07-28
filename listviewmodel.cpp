@@ -7,7 +7,7 @@ ListViewModel::ListViewModel(TodoList& todoList, QThreadPool& threadPool)
 }
 
 void ListViewModel::load() {
-    threadPool.start(std::bind(&ListViewModel::reload, this));
+    threadPool.start([this] { reload(); });
 }
 
 void ListViewModel::removeTodo(TodoModel *model)
@@ -18,7 +18,7 @@ void ListViewModel::removeTodo(TodoModel *model)
     });
 }
 
-const QList<TodoModel*> ListViewModel::todos() const {
+QList<TodoModel*> ListViewModel::todos() const {
     return todoListModels;
 }
 
@@ -33,7 +33,7 @@ void ListViewModel::reload() {
 }
 
 void ListViewModel::initialize() {
-    for (auto todo: todoList.getTodos()) {
+    for (const auto& todo: todoList.getTodos()) {
         todoListModels.append(new TodoModel(todo));
         todoListModels.last()->moveToThread(thread());
     }

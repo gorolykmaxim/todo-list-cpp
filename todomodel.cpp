@@ -6,7 +6,7 @@ TodoModel::TodoModel(const Todo &todo)
 
 }
 
-const QString TodoModel::getText() const {
+QString TodoModel::getText() const {
     return text;
 }
 
