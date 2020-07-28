@@ -24,20 +24,25 @@ if (APPLE)
     add_executable(TodoList MACOSX_BUNDLE ${SOURCES} macos/icon.icns ${RESOURCES})
     set_source_files_properties(macos/icon.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set_target_properties(TodoList PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/macos/Info.plist)
-    set(ARTIFACT_PATH $<TARGET_FILE_DIR:TodoList>/../..)
-    find_program(DEPLOY_QT_EXECUTABLE macdeployqt)
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        find_program(DEPLOY_QT_EXECUTABLE macdeployqt)
+        add_custom_command(TARGET TodoList POST_BUILD
+                COMMAND "${DEPLOY_QT_EXECUTABLE}"
+                $<TARGET_FILE_DIR:TodoList>/../..
+                -qmldir=${PROJECT_SOURCE_DIR}
+                -dmg
+                COMMENT "Running macdeployqt...")
+    endif()
 elseif(WIN32)
     add_executable(TodoList WIN32 ${SOURCES} ${RESOURCES})
-    set(ARTIFACT_PATH $<TARGET_FILE_DIR:TodoList>)
-    find_program(DEPLOY_QT_EXECUTABLE windeployqt)
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        find_program(DEPLOY_QT_EXECUTABLE windeployqt)
+        add_custom_command(TARGET TodoList POST_BUILD
+                COMMAND "${DEPLOY_QT_EXECUTABLE}"
+                $<TARGET_FILE_DIR:TodoList>
+                -qmldir=${PROJECT_SOURCE_DIR}
+                COMMENT "Running windeployqt...")
+    endif()
 endif()
 
 target_link_libraries(TodoList Qt5::Quick)
-
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_custom_command(TARGET TodoList POST_BUILD
-            COMMAND "${DEPLOY_QT_EXECUTABLE}"
-            "${ARTIFACT_PATH}"
-            -qmldir=${PROJECT_SOURCE_DIR}
-            COMMENT "Running *deployqt...")
-endif()
