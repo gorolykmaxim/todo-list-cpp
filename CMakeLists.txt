@@ -29,10 +29,7 @@ if (APPLE)
         set(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
         set(BUNDLE_DIR ${OUTPUT_DIR}.app)
         add_custom_command(TARGET TodoList POST_BUILD
-                COMMAND "${DEPLOY_QT_EXECUTABLE}"
-                ${BUNDLE_DIR}
-                -qmldir=${PROJECT_SOURCE_DIR}
-                -dmg
+                COMMAND "${DEPLOY_QT_EXECUTABLE}" ${BUNDLE_DIR} -qmldir=${PROJECT_SOURCE_DIR} -dmg
                 BYPRODUCTS ${BUNDLE_DIR} ${OUTPUT_DIR}.dmg
                 COMMENT "Running macdeployqt...")
     endif()
