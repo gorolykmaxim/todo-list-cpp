@@ -26,11 +26,14 @@ if (APPLE)
     set_target_properties(TodoList PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/macos/Info.plist)
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         find_program(DEPLOY_QT_EXECUTABLE macdeployqt)
+        set(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
+        set(BUNDLE_DIR ${OUTPUT_DIR}.app)
         add_custom_command(TARGET TodoList POST_BUILD
                 COMMAND "${DEPLOY_QT_EXECUTABLE}"
-                $<TARGET_FILE_DIR:TodoList>/../..
+                ${BUNDLE_DIR}
                 -qmldir=${PROJECT_SOURCE_DIR}
                 -dmg
+                BYPRODUCTS ${BUNDLE_DIR} ${OUTPUT_DIR}.dmg
                 COMMENT "Running macdeployqt...")
     endif()
 elseif(WIN32)
