@@ -37,10 +37,12 @@ elseif(WIN32)
     add_executable(TodoList WIN32 ${SOURCES} ${RESOURCES})
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         find_program(DEPLOY_QT_EXECUTABLE windeployqt)
+        set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/output")
         add_custom_command(TARGET TodoList POST_BUILD
-                COMMAND "${DEPLOY_QT_EXECUTABLE}"
-                $<TARGET_FILE_DIR:TodoList>
-                -qmldir=${PROJECT_SOURCE_DIR}
+                COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTPUT_DIR}
+                COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:TodoList> ${OUTPUT_DIR}
+                COMMAND "${DEPLOY_QT_EXECUTABLE}" ${OUTPUT_DIR} -qmldir=${PROJECT_SOURCE_DIR}
+                BYPRODUCTS ${OUTPUT_DIR}
                 COMMENT "Running windeployqt...")
     endif()
 endif()
