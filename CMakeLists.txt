@@ -44,6 +44,18 @@ elseif(WIN32)
                 COMMAND "${DEPLOY_QT_EXECUTABLE}" ${OUTPUT_DIR} -qmldir=${PROJECT_SOURCE_DIR}
                 BYPRODUCTS ${OUTPUT_DIR}
                 COMMENT "Running windeployqt...")
+        if (DEFINED ENV{NSIS_PATH})
+            find_program(NSIS_EXECUTABLE makensis $ENV{NSIS_PATH} REQUIRED)
+            add_custom_command(TARGET TodoList POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E env
+                        NSIS_INPUT_DIR=${OUTPUT_DIR}
+                        NSIS_OUTPUT_DIR=${OUTPUT_DIR}
+                    "${NSIS_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/windows/installer.nsi"
+                    COMMENT "Compiling an installer...")
+        else()
+            add_custom_command(TARGET TodoList POST_BUILD
+                    COMMENT "NSIS executable was not found - skipping installer compilation.")
+        endif ()
     endif()
 endif()
 

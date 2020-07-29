@@ -1,7 +1,7 @@
 !include "MUI2.nsh"
 
 Name "Todo List"
-Outfile "install.exe"
+Outfile "$%NSIS_OUTPUT_DIR%\install.exe"
 Unicode True
 
 InstallDir "$APPDATA\Todo List"
@@ -14,14 +14,14 @@ InstallDir "$APPDATA\Todo List"
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
-!insertmacro MUI_LANGUAGE English
-
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
+!insertmacro MUI_LANGUAGE English
+
 Section
     SetOutPath "$INSTDIR"
-    File /r "..\cmake-build-release\output\*"
+    File /r "$%NSIS_INPUT_DIR%\*"
     File "icon.ico"
     CreateShortcut "$DESKTOP\TodoList.lnk" "$INSTDIR\TodoList.exe" "" "$INSTDIR\icon.ico" 0
     WriteUninstaller "$INSTDIR\uninstall.exe"
