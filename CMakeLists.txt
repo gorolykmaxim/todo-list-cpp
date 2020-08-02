@@ -59,6 +59,7 @@ elseif(WIN32)
     endif()
 elseif(ANDROID)
     add_library(TodoList SHARED ${SOURCES} ${RESOURCES})
+    set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android CACHE INTERNAL "")
 endif()
 
 target_link_libraries(TodoList Qt5::Quick)
