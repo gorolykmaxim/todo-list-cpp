@@ -59,9 +59,6 @@ elseif(WIN32)
     endif()
 elseif(ANDROID)
     add_library(TodoList SHARED ${SOURCES} ${RESOURCES})
-    include(android/cmake/AddQtAndroidApk.cmake)
-    add_qt_android_apk(TodoListApk TodoList
-            PACKAGE_SOURCES ${CMAKE_SOURCE_DIR}/android/sources)
 endif()
 
 target_link_libraries(TodoList Qt5::Quick)
