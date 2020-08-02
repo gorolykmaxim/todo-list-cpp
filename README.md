@@ -28,3 +28,12 @@ When you compile the app in Release mode with NSIS_PATH env variable set -
 the installer will be located in the output subdirectory of CMake's build
 directory.
 
+## How to build Android version
+
+Don't waste your time with plain old CMake. 
+
+Import the project into Qt Creator and build it there however you want:
+- multiple small apks
+- one fat apk
+- aab
+- debug
