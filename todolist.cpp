@@ -5,7 +5,7 @@
 TodoList::TodoList(const std::filesystem::path& databaseFilePath) {
     try {
         auto onError = [=] {throw TodoListInitializationError(sqlite3_errmsg(db));};
-        execute([&] {return sqlite3_open(databaseFilePath.c_str(), &db);}, onError);
+        execute([&] {return sqlite3_open(databaseFilePath.string().c_str(), &db);}, onError);
         execute([&] {return sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS TODO(\"TEXT\" TEXT)", nullptr, nullptr, nullptr);}, onError);
         execute([&] {return sqlite3_prepare_v2(db, "INSERT INTO TODO VALUES(?)", -1, &addStatement, nullptr);}, onError);
         execute([&] {return sqlite3_prepare_v2(db, "DELETE FROM TODO WHERE rowid = ?", -1, &removeStatement, nullptr);}, onError);
