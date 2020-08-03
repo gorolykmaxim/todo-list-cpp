@@ -2,6 +2,7 @@
 #include "addtodoviewmodel.h"
 #include "todolist.h"
 
+#include <filesystem>
 #include <QQmlContext>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -16,10 +17,8 @@ int main(int argc, char *argv[])
     for (const auto& font: QDir(fontsDir).entryList()) {
         QFontDatabase::addApplicationFont(fontsDir + font);
     }
-    TodoList list;
-    list.addTodo({"Chill"});
-    list.addTodo({"Try to finish this app"});
-    list.addTodo({"Chill a bit more"});
+    auto databaseFilePath = std::filesystem::temp_directory_path() / "todo-list.db";
+    TodoList list(databaseFilePath);
     QThreadPool threadPool;
     threadPool.setMaxThreadCount(1);
     ListViewModel listViewModel(list, threadPool);

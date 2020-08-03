@@ -8,6 +8,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Quick REQUIRED)
 qt5_add_resources(RESOURCES qml.qrc)
+add_subdirectory(third-party/sqlite-amalgamation)
 
 set(SOURCES
         addtodoviewmodel.cpp
@@ -62,4 +63,4 @@ elseif(ANDROID)
     set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android CACHE INTERNAL "")
 endif()
 
-target_link_libraries(TodoList Qt5::Quick)
+target_link_libraries(TodoList Qt5::Quick SQLite3)
