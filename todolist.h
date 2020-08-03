@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <filesystem>
 #include <functional>
 #include "third-party/sqlite-amalgamation/sqlite3.h"
 
@@ -15,7 +14,7 @@ struct Todo {
 class TodoList
 {
 public:
-    TodoList(const std::filesystem::path& databaseFilePath);
+    explicit TodoList(const std::string& databaseFilePath);
 
     void addTodo(const std::string& todoText);
     void removeTodo(int todoId);
