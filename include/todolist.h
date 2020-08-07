@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <functional>
-#include "third-party/sqlite-amalgamation/sqlite3.h"
+#include "sqlite3.h"
 
 struct Todo {
     int id;

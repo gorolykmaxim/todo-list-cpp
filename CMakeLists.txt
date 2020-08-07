@@ -6,25 +6,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Quick REQUIRED)
-qt5_add_resources(RESOURCES qml.qrc)
-add_subdirectory(third-party/sqlite-amalgamation)
-
-set(SOURCES
-        addtodoviewmodel.cpp
-        addtodoviewmodel.h
-        listviewmodel.cpp
-        listviewmodel.h
-        main.cpp
-        todolist.cpp
-        todolist.h
-        todomodel.cpp
-        todomodel.h)
-
 if (APPLE)
-    add_executable(TodoList MACOSX_BUNDLE ${SOURCES} macos/icon.icns ${RESOURCES})
-    set_source_files_properties(macos/icon.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    set_target_properties(TodoList PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/macos/Info.plist)
+    add_executable(TodoList MACOSX_BUNDLE resource/macos/icon.icns)
+    set_source_files_properties(resource/macos/icon.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    set_target_properties(TodoList PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resource/macos/Info.plist)
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         find_program(DEPLOY_QT_EXECUTABLE macdeployqt)
         set(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
@@ -35,7 +20,7 @@ if (APPLE)
                 COMMENT "Running macdeployqt...")
     endif()
 elseif(WIN32)
-    add_executable(TodoList WIN32 ${SOURCES} ${RESOURCES})
+    add_executable(TodoList WIN32)
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         find_program(DEPLOY_QT_EXECUTABLE windeployqt)
         set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/output")
@@ -51,16 +36,32 @@ elseif(WIN32)
                     COMMAND ${CMAKE_COMMAND} -E env
                         NSIS_INPUT_DIR=${OUTPUT_DIR}
                         NSIS_OUTPUT_DIR=${OUTPUT_DIR}
-                    "${NSIS_EXECUTABLE}" "${PROJECT_SOURCE_DIR}/windows/installer.nsi"
+                    "${NSIS_EXECUTABLE}" "resource/windows/installer.nsi"
                     COMMENT "Compiling an installer...")
         else()
             add_custom_command(TARGET TodoList POST_BUILD
                     COMMENT "NSIS executable was not found - skipping installer compilation.")
         endif ()
     endif()
-elseif(ANDROID)
-    add_library(TodoList SHARED ${SOURCES} ${RESOURCES})
-    set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android CACHE INTERNAL "")
+elseif(android)
+    add_library(TodoList SHARED)
+    set(ANDROID_PACKAGE_SOURCE_DIR resource/android CACHE INTERNAL "")
 endif()
 
+find_package(Qt5 COMPONENTS Quick REQUIRED)
+qt5_add_resources(RESOURCES resource/qml.qrc)
+add_subdirectory(lib/sqlite)
+
+target_sources(TodoList PRIVATE
+        include/addtodoviewmodel.h
+        include/listviewmodel.h
+        include/todolist.h
+        include/todomodel.h
+        src/addtodoviewmodel.cpp
+        src/listviewmodel.cpp
+        src/todolist.cpp
+        src/main.cpp
+        src/todomodel.cpp
+        ${RESOURCES})
+target_include_directories(TodoList PRIVATE lib/sqlite PRIVATE include)
 target_link_libraries(TodoList Qt5::Quick SQLite3)
