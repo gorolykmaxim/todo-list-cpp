@@ -6,8 +6,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+find_package(Qt5 COMPONENTS Quick REQUIRED)
+qt5_add_resources(RESOURCES resource/qml.qrc)
+add_subdirectory(lib/sqlite)
+set(SOURCES include/addtodoviewmodel.h
+        include/listviewmodel.h
+        include/todolist.h
+        include/todomodel.h
+        src/addtodoviewmodel.cpp
+        src/listviewmodel.cpp
+        src/todolist.cpp
+        src/main.cpp
+        src/todomodel.cpp)
+
 if (APPLE)
-    add_executable(TodoList MACOSX_BUNDLE resource/macos/icon.icns)
+    add_executable(TodoList MACOSX_BUNDLE ${SOURCES} ${RESOURCES} resource/macos/icon.icns)
     set_source_files_properties(resource/macos/icon.icns PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     set_target_properties(TodoList PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resource/macos/Info.plist)
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -20,7 +33,7 @@ if (APPLE)
                 COMMENT "Running macdeployqt...")
     endif()
 elseif(WIN32)
-    add_executable(TodoList WIN32)
+    add_executable(TodoList WIN32 ${SOURCES} ${RESOURCES})
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         find_program(DEPLOY_QT_EXECUTABLE windeployqt)
         set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/output")
@@ -43,25 +56,10 @@ elseif(WIN32)
                     COMMENT "NSIS executable was not found - skipping installer compilation.")
         endif ()
     endif()
-elseif(android)
-    add_library(TodoList SHARED)
-    set(ANDROID_PACKAGE_SOURCE_DIR resource/android CACHE INTERNAL "")
+elseif(ANDROID)
+    add_library(TodoList SHARED ${SOURCES} ${RESOURCES})
+    set(ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/resource/android CACHE INTERNAL "")
 endif()
 
-find_package(Qt5 COMPONENTS Quick REQUIRED)
-qt5_add_resources(RESOURCES resource/qml.qrc)
-add_subdirectory(lib/sqlite)
-
-target_sources(TodoList PRIVATE
-        include/addtodoviewmodel.h
-        include/listviewmodel.h
-        include/todolist.h
-        include/todomodel.h
-        src/addtodoviewmodel.cpp
-        src/listviewmodel.cpp
-        src/todolist.cpp
-        src/main.cpp
-        src/todomodel.cpp
-        ${RESOURCES})
 target_include_directories(TodoList PRIVATE lib/sqlite PRIVATE include)
 target_link_libraries(TodoList Qt5::Quick SQLite3)
