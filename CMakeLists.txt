@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt5 COMPONENTS Quick REQUIRED)
+find_package(Qt5 COMPONENTS Quick Concurrent REQUIRED)
 qt5_add_resources(RESOURCES resource/qml.qrc)
 add_subdirectory(lib/sqlite)
 set(SOURCES include/addtodoviewmodel.h
@@ -62,4 +62,4 @@ elseif(ANDROID)
 endif()
 
 target_include_directories(TodoList PRIVATE lib/sqlite PRIVATE include)
-target_link_libraries(TodoList Qt5::Quick SQLite3)
+target_link_libraries(TodoList Qt5::Quick Qt5::Concurrent SQLite3)

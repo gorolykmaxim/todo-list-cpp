@@ -1,14 +1,15 @@
+#include <QtConcurrent>
 #include "addtodoviewmodel.h"
 
 AddTodoViewModel::AddTodoViewModel(TodoList& todoList, QThreadPool& threadPool)
     : todoList(todoList), threadPool(threadPool)
 {
-
+    connect(&additionWatcher, &QFutureWatcher<void>::finished, this, &AddTodoViewModel::cancel);
 }
 
 void AddTodoViewModel::setText(QString text) {
-    this->text = text;
-    emit textChanged(text);
+    this->text = std::move(text);
+    emit textChanged(this->text);
 }
 
 QString AddTodoViewModel::getText() const {
@@ -16,19 +17,11 @@ QString AddTodoViewModel::getText() const {
 }
 
 void AddTodoViewModel::addTodo() {
-    QString todoText = text;
-    threadPool.tryStart([=] () {
-        todoList.addTodo(todoText.toStdString());
-        dispose();
-    });
+    QFuture<void> todoAdded = QtConcurrent::run(&threadPool, &todoList, &TodoList::addTodo, text.toStdString());
+    additionWatcher.setFuture(todoAdded);
 }
 
 void AddTodoViewModel::cancel() {
-    threadPool.tryStart(std::bind(&AddTodoViewModel::dispose, this));
-}
-
-void AddTodoViewModel::dispose()
-{
     text.clear();
     emit closeView();
 }

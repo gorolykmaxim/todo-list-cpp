@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QThreadPool>
+#include <QFutureWatcher>
 #include "todolist.h"
 #include "todomodel.h"
 
@@ -23,6 +24,8 @@ private:
     TodoList& todoList;
     QThreadPool& threadPool;
     QList<TodoModel*> todoListModels;
+    QFutureWatcher<std::vector<Todo>> todosWatcher;
+    QFutureWatcher<void> removalWatcher;
     void initialize();
     void clear();
     void reload();

@@ -1,21 +1,23 @@
+#include <QtConcurrent>
 #include "listviewmodel.h"
 
 ListViewModel::ListViewModel(TodoList& todoList, QThreadPool& threadPool)
     : todoList(todoList), threadPool(threadPool)
 {
+    connect(&todosWatcher, &QFutureWatcher<std::vector<Todo>>::finished, this, &ListViewModel::reload);
+    connect(&removalWatcher, &QFutureWatcher<void>::finished, this, &ListViewModel::load);
     load();
 }
 
 void ListViewModel::load() {
-    threadPool.start([this] { reload(); });
+    QFuture<std::vector<Todo>> loadedTodos = QtConcurrent::run(&threadPool, &todoList, &TodoList::getTodos);
+    todosWatcher.setFuture(loadedTodos);
 }
 
 void ListViewModel::removeTodo(TodoModel *model)
 {
-    threadPool.tryStart([=] () {
-        todoList.removeTodo(model->getId());
-        reload();
-    });
+    QFuture<void> todoRemoved = QtConcurrent::run(&threadPool, &todoList, &TodoList::removeTodo, model->getId());
+    removalWatcher.setFuture(todoRemoved);
 }
 
 QList<TodoModel*> ListViewModel::todos() const {
@@ -33,9 +35,8 @@ void ListViewModel::reload() {
 }
 
 void ListViewModel::initialize() {
-    for (const auto& todo: todoList.getTodos()) {
+    for (const auto& todo: todosWatcher.result()) {
         todoListModels.append(new TodoModel(todo));
-        todoListModels.last()->moveToThread(thread());
     }
     emit todosChanged(todoListModels);
 }

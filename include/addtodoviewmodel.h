@@ -5,6 +5,7 @@
 
 #include <QObject>
 #include <QThreadPool>
+#include <QFutureWatcher>
 
 class AddTodoViewModel : public QObject
 {
@@ -15,7 +16,7 @@ public:
     void setText(QString text);
     QString getText() const;
 signals:
-    void textChanged(const QString newText);
+    void textChanged(QString newText);
     void closeView();
 public slots:
     void addTodo();
@@ -24,7 +25,7 @@ private:
     TodoList& todoList;
     QThreadPool& threadPool;
     QString text;
-    void dispose();
+    QFutureWatcher<void> additionWatcher;
 };
 
 #endif // ADDTODOVIEWMODEL_H
