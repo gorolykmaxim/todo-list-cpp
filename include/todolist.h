@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <stdexcept>
 #include "sqlite3.h"
 
 struct Todo {
